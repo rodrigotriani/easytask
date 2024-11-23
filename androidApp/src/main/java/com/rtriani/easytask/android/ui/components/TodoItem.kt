@@ -33,7 +33,6 @@ import com.rtriani.easytask.android.ui.theme.EasyTaskTheme
 @Composable
 fun TodoItem(
     todo: Todo,
-    onCompletedChange: (Boolean) -> Unit = {},
     onItemClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -42,35 +41,17 @@ fun TodoItem(
         modifier = modifier.padding(16.dp)
     ){
         Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Checkbox(
-                checked = todo.isCompleted,
-                onCheckedChange = onCompletedChange
-            )
-            Text(
-                modifier = Modifier.width(60.dp),
-                style = TextStyle(
-                    fontSize = 10.sp
-                ),
-                textAlign = TextAlign.Center,
-                text = if(todo.isCompleted) "Finalizado" else "Em andamento"
-            )
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth(.65f)
+            modifier = Modifier.fillMaxWidth(.75f)
                 .align(
                     Alignment.CenterVertically
                 ),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = todo.title,
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 color = Color(0xFF7895AB),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -148,7 +129,6 @@ private fun TodoItemPreview() {
     EasyTaskTheme {
         TodoItem(
             todo = todo1,
-            onCompletedChange = {},
             onItemClick = {},
             onDeleteClick = {}
         )
@@ -161,7 +141,6 @@ private fun TodoItemCompletedPreview() {
     EasyTaskTheme {
         TodoItem(
             todo = todo2,
-            onCompletedChange = {},
             onItemClick = {},
             onDeleteClick = {}
         )

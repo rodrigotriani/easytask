@@ -23,6 +23,8 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rtriani.easytask.android.R.drawable
 import com.rtriani.easytask.android.data.AppDBProvider
 import com.rtriani.easytask.android.data.TodoRepositoryImpl
+import com.rtriani.easytask.android.domain.StatusEnum
 import com.rtriani.easytask.android.domain.Todo
 import com.rtriani.easytask.android.domain.todo1
 import com.rtriani.easytask.android.domain.todo2
@@ -80,6 +86,7 @@ fun ListScreen(
     val todos by viewModel.todos.collectAsState()
 
     val search = viewModel.search
+    val status = viewModel.status
 
     BackHandler {
         activity.finish()
@@ -117,6 +124,13 @@ fun ListContent(
     search: String = "",
     onEvent: (ListEvent) -> Unit
 ) {
+
+    val tabs = StatusEnum.entries.map {
+        StatusEnum.valueOf(it.toString()).status
+    }
+
+    var tabIndex by remember { mutableStateOf(StatusEnum.PENDENTE.ordinal) }
+
     Scaffold(
         bottomBar = {
             BottomNavigation {
@@ -191,12 +205,41 @@ fun ListContent(
                         label = "Pesquisar",
                         search = search,
                         onValueChange = {
-                            onEvent(ListEvent.SearchChanged(it))
+                            onEvent(
+                                ListEvent.SearchChanged(
+                                    search = it,
+                                    status = StatusEnum.entries.get(tabIndex)
+                                )
+                            )
                         }
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
+
+                Column{
+                    TabRow(
+                        selectedTabIndex = tabIndex
+                    ) {
+                        tabs.forEachIndexed { index, title ->
+                            Tab(
+                                text = {
+                                    Text(title)
+                                },
+                                selected = tabIndex == index,
+                                onClick = {
+                                    tabIndex = index
+                                    onEvent(
+                                        ListEvent.SearchChanged(
+                                            search = search,
+                                            status = StatusEnum.entries.get(tabIndex)
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 LazyColumn(
                     modifier = Modifier.consumeWindowInsets(paddingValues)
@@ -212,9 +255,6 @@ fun ListContent(
                                     }
                                 ),
                             todo = todo,
-                            onCompletedChange = {
-                                onEvent(ListEvent.CompleteChanged(todo.id, it))
-                            },
                             onItemClick = {
                                 onEvent(ListEvent.AddEdit(todo.id))
                             },

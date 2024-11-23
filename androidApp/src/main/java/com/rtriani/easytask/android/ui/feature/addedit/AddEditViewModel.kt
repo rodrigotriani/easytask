@@ -1,18 +1,16 @@
 package com.rtriani.easytask.android.ui.feature.addedit
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rtriani.easytask.android.classes.convertStringToDate
 import com.rtriani.easytask.android.data.TodoRepository
+import com.rtriani.easytask.android.domain.StatusEnum
 import com.rtriani.easytask.android.ui.UIEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class AddEditViewModel(
     private val id: Long? = null,
@@ -24,6 +22,9 @@ class AddEditViewModel(
     var description: String? by mutableStateOf(value = null)
         private set
 
+    var status: StatusEnum by mutableStateOf(value = StatusEnum.PENDENTE)
+        private set
+
     private val _uiEvent = Channel<UIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
@@ -33,6 +34,7 @@ class AddEditViewModel(
                 repository.GetById(it)?.let { todo ->
                     title = todo.title
                     description = todo.description ?: ""
+                    status = todo.status
                 }
             }
         }
@@ -45,6 +47,9 @@ class AddEditViewModel(
             }
             is AddEditEvent.DescriptionChanged -> {
                 description = event.description
+            }
+            is AddEditEvent.StatusChanged -> {
+                status = event.status
             }
             AddEditEvent.Save -> {
                 Save()
@@ -59,7 +64,7 @@ class AddEditViewModel(
                 return@launch
             }
 
-            repository.Insert(title, description, id)
+            repository.Insert(title, description, status, id)
             _uiEvent.send(UIEvent.ShowSnackbar("Tarefa salva com sucesso"))
             _uiEvent.send(UIEvent.NavigateBack)
         }

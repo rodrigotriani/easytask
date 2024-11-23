@@ -1,16 +1,17 @@
 package com.rtriani.easytask.android.classes
 
 import androidx.room.TypeConverter
+import com.rtriani.easytask.android.domain.StatusEnum
 import java.util.Date
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun statusFromString(value: String?): StatusEnum {
+        return StatusEnum.valueOf(value ?: "PENDENTE")
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
+    fun statusToString(status: StatusEnum?): String {
+        return status?.name ?: "PENDENTE"
     }
 }

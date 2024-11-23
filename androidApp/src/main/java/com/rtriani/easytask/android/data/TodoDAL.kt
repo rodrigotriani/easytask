@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.rtriani.easytask.android.domain.StatusEnum
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,11 +16,11 @@ interface TodoDAL {
     @Delete
     suspend fun Delete(entity: TodoEntity)
 
-    @Query("SELECT * FROM todos")
-    fun GetAll(): Flow<List<TodoEntity>>
+    @Query("SELECT * FROM todos WHERE status = :status")
+    fun GetAll(status: StatusEnum): Flow<List<TodoEntity>>
 
-    @Query("SELECT * FROM todos WHERE title LIKE '%' || :title || '%'")
-    fun GetByTitle(title: String): Flow<List<TodoEntity>>
+    @Query("SELECT * FROM todos WHERE title LIKE '%' || :title || '%' AND status = :status")
+    fun Filter(title: String, status: StatusEnum): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM todos WHERE id = :id")
     suspend fun GetById(id: Long): TodoEntity?

@@ -21,7 +21,7 @@ public class RootProjectAccessor extends TypeSafeProjectDependencyFactory {
     /**
      * Creates a project dependency on the project at path ":"
      */
-    public BeautyTaskListProjectDependency getBeautyTaskList() { return new BeautyTaskListProjectDependency(getFactory(), create(":")); }
+    public EasyTaskProjectDependency getEasyTask() { return new EasyTaskProjectDependency(getFactory(), create(":")); }
 
     /**
      * Creates a project dependency on the project at path ":androidApp"

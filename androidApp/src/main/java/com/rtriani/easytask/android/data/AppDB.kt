@@ -9,9 +9,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rtriani.easytask.android.classes.Converters
 
-val MIGRATION = object : Migration(5, 6) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE todos DROP COLUMN taskDate")
+val MIGRATION = object : Migration(11, 12) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE todos DROP COLUMN status")
+        db.execSQL("ALTER TABLE todos ADD COLUMN status TEXT NOT NULL DEFAULT 'PENDENTE'")
     }
 }
 
@@ -20,8 +21,7 @@ val MIGRATION = object : Migration(5, 6) {
         TodoEntity::class,
         AuthorizationEntity::class
     ],
-    version = 6,
-    exportSchema = false
+    version = 12
 )
 @TypeConverters(Converters::class)
 abstract class AppDB: RoomDatabase() {

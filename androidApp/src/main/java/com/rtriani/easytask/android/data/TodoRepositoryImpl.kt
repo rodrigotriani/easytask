@@ -1,5 +1,6 @@
 package com.rtriani.easytask.android.data
 
+import com.rtriani.easytask.android.domain.StatusEnum
 import com.rtriani.easytask.android.domain.Todo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -7,25 +8,19 @@ import kotlinx.coroutines.flow.map
 class TodoRepositoryImpl(
     private val dal: TodoDAL
 ): TodoRepository {
-    override suspend fun Insert(title: String, description: String?, id: Long?) {
+    override suspend fun Insert(title: String, description: String?, status: StatusEnum, id: Long?) {
         val todo = id?.let {
             dal.GetById(id)?.copy(
                 title = title,
-                description = description
+                description = description,
+                status = status
             )
         } ?: TodoEntity(
             title = title,
             description = description,
-            isCompleted = false
+            status = status
         )
         dal.Insert(todo)
-    }
-
-    override suspend fun UpdateCompleted(id: Long, isCompleted: Boolean) {
-        val todo = dal.GetById(id)
-        todo?.let {
-            dal.Insert(it.copy(isCompleted = isCompleted))
-        }
     }
 
     override suspend fun Delete(id: Long) {
@@ -33,27 +28,27 @@ class TodoRepositoryImpl(
         dal.Delete(todo)
     }
 
-    override fun GetAll(): Flow<List<Todo>> {
-        return dal.GetAll().map { entities->
+    override fun GetAll(status: StatusEnum): Flow<List<Todo>> {
+        return dal.GetAll(status).map { entities->
             entities.map{entity ->
                 Todo(
                     id = entity.id,
                     title = entity.title,
                     description = entity.description,
-                    isCompleted = entity.isCompleted
+                    status = entity.status
                 )
             }
         }
     }
 
-    override fun GetByTitle(title: String): Flow<List<Todo>> {
-        return dal.GetByTitle(title).map { entities->
+    override fun Filter(title: String, status: StatusEnum): Flow<List<Todo>> {
+        return dal.Filter(title, status).map { entities->
             entities.map{entity ->
                 Todo(
                     id = entity.id,
                     title = entity.title,
                     description = entity.description,
-                    isCompleted = entity.isCompleted
+                    status = entity.status
                 )
             }
         }
@@ -65,7 +60,7 @@ class TodoRepositoryImpl(
                 id = entity.id,
                 title = entity.title,
                 description = entity.description,
-                isCompleted = entity.isCompleted
+                status = entity.status
             )
         }
     }
