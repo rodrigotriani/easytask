@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -114,6 +115,7 @@ fun ListScreen(
     ListContent(
         todos = todos,
         search = search ?: "",
+        status = status,
         onEvent = viewModel::onEvent
     )
 }
@@ -122,6 +124,7 @@ fun ListScreen(
 fun ListContent(
     todos: List<Todo>,
     search: String = "",
+    status: StatusEnum = StatusEnum.PENDENTE,
     onEvent: (ListEvent) -> Unit
 ) {
 
@@ -129,11 +132,14 @@ fun ListContent(
         StatusEnum.valueOf(it.toString()).status
     }
 
-    var tabIndex by remember { mutableStateOf(StatusEnum.PENDENTE.ordinal) }
+    var tabIndex by remember { mutableStateOf(status.ordinal) }
 
     Scaffold(
         bottomBar = {
-            BottomNavigation {
+            BottomNavigation(
+                backgroundColor = Color(0xFF7895AB),
+                contentColor = Color.White
+            ) {
                 BottomNavigationItem(
                     selected = false,
                     onClick = {
@@ -144,14 +150,15 @@ fun ListContent(
                             painter = painterResource(id = drawable.profile_icon),
                             tint = Color.Unspecified,
                             modifier = Modifier.size(
-                                30.dp
+                                20.dp
                             ),
                             contentDescription = "Visualizar/Editar Perfil"
                         )
                     },
                     label = {
                         Text(
-                            "Perfil"
+                            "Perfil",
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 )
@@ -166,14 +173,15 @@ fun ListContent(
                             painter = painterResource(id = drawable.add_icon),
                             tint = Color.Unspecified,
                             modifier = Modifier.size(
-                                30.dp
+                                20.dp
                             ),
                             contentDescription = "Adicionar tarefa"
                         )
                     },
                     label = {
                         Text(
-                            "Adicionar"
+                            "Adicionar",
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 )
@@ -217,7 +225,9 @@ fun ListContent(
 
                 Column{
                     TabRow(
-                        selectedTabIndex = tabIndex
+                        selectedTabIndex = tabIndex,
+                        backgroundColor = Color(0xFF7895AB),
+                        contentColor = Color.White
                     ) {
                         tabs.forEachIndexed { index, title ->
                             Tab(
@@ -283,6 +293,7 @@ private fun ListContentPreview() {
                 todo2
             ),
             search = "Todo 1",
+            status = StatusEnum.PENDENTE,
             onEvent = {}
         )
     }

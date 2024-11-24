@@ -38,10 +38,10 @@ fun TodoItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(16.dp)
+        modifier = modifier.padding(10.dp)
     ){
         Column(
-            modifier = Modifier.fillMaxWidth(.75f)
+            modifier = Modifier.fillMaxWidth(.70f)
                 .align(
                     Alignment.CenterVertically
                 ),
@@ -58,11 +58,14 @@ fun TodoItem(
         }
 
         Column (
-            modifier = Modifier.width(100.dp),
+            modifier = Modifier.fillMaxWidth(1f),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Row (){
+            Row (
+                modifier = Modifier.fillMaxWidth(1f),
+                horizontalArrangement = Arrangement.End,
+            ){
                 Column {
                     IconButton(
                         onClick = onItemClick
