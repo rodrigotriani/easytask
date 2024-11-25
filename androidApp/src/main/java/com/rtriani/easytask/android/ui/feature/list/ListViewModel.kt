@@ -48,7 +48,6 @@ class ListViewModel(
                 viewModelScope.launch {
                     _uiEvent.send(UIEvent.Navigate(ProfileRoute))
                 }
-
             }
             is ListEvent.SearchChanged -> {
                 search = event.search

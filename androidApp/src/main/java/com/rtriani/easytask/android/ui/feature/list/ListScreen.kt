@@ -19,10 +19,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Tab
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Tab
 import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -212,7 +212,7 @@ fun ListContent(
                             onEvent(
                                 ListEvent.SearchChanged(
                                     search = it,
-                                    status = StatusEnum.entries.get(tabIndex)
+                                    status = StatusEnum.entries[tabIndex]
                                 )
                             )
                         }
