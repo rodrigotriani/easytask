@@ -244,7 +244,8 @@ fun ListContent(
                                 text = {
                                     Text(
                                         text = title,
-                                        color = Color.White
+                                        color = Color.White,
+                                        fontSize = 12.sp,
                                     )
                                 },
                                 selected = tabIndex == index,
