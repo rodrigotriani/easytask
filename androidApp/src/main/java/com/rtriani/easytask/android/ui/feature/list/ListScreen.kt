@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -39,7 +40,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rtriani.easytask.android.R.drawable
 import com.rtriani.easytask.android.data.AppDBProvider
@@ -146,15 +150,20 @@ fun ListContent(
                             painter = painterResource(id = drawable.profile_icon),
                             tint = Color.Unspecified,
                             modifier = Modifier.size(
-                                20.dp
-                            ),
+                                30.dp
+                            ).padding(6.dp),
                             contentDescription = "Visualizar/Editar Perfil"
                         )
                     },
                     label = {
                         Text(
-                            "Perfil",
-                            fontWeight = FontWeight.Bold
+                            text = "Perfil",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(
+                                vertical = 5.dp
+                            )
                         )
                     }
                 )
@@ -169,15 +178,20 @@ fun ListContent(
                             painter = painterResource(id = drawable.add_icon),
                             tint = Color.Unspecified,
                             modifier = Modifier.size(
-                                20.dp
-                            ),
+                                30.dp
+                            ).padding(6.dp),
                             contentDescription = "Adicionar tarefa"
                         )
                     },
                     label = {
                         Text(
                             "Adicionar",
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(
+                                vertical = 5.dp
+                            )
                         )
                     }
                 )
@@ -228,7 +242,10 @@ fun ListContent(
                         tabs.forEachIndexed { index, title ->
                             Tab(
                                 text = {
-                                    Text(title)
+                                    Text(
+                                        text = title,
+                                        color = Color.White
+                                    )
                                 },
                                 selected = tabIndex == index,
                                 onClick = {
